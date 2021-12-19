@@ -54,7 +54,7 @@ namespace Lub3
                 MyArgs.Append(ar);
             }
             string arg = MyArgs.ToString();
-            if (args.Length == 0)       //Реализация помощника в консоли 
+            if (args.Length == 0)
             {
                 Console.WriteLine("Помощь в использовании приложением.");
                 Console.WriteLine("Первый аргумент должен быть либо полным путём к .txt файлу, либо '-' вместо пути.");
@@ -64,7 +64,7 @@ namespace Lub3
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-            else if (args[0] == "/help" || args[0] == "-help")  //Помощник если попросили
+            else if (args[0] == "/help" || args[0] == "-help")
             {
                 Console.WriteLine("Помощь в использовании приложением.");
                 Console.WriteLine("Первый аргумент должен быть либо полным путём к .txt файлу, либо '-' вместо пути.");
