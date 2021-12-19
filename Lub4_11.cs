@@ -7,129 +7,90 @@ namespace Lub3
 {
     class Lub4_11
     {
-        public static string puthIN = @"C:\All\C#\Lub3\input.txt";              //Глобальная переменная для пути исходного файла (Для справки)
-        public static string puthOUT = @"C:\All\C#\Lub3\output.txt";            //Глобальная переменная для пути выходного файла
+        //C:\All\C#\Lub3\input.txt             //Путь исходного файла (Для справки)
+        //C:\All\C#\Lub3\output.txt            //Путь выходного файла (Для справки)
 
-        static void ReadText(string[] args, int go, StringBuilder Read, int j)
-        {
-            try
-            {
-                char[] arg = args[j].ToCharArray();             //Создание массива из аргумента, для удаления первого элемента
-                go = int.Parse(arg[1].ToString());              //Присваивание оставшейся части в переменную шага
-            }
-            catch
-            {
-                Console.WriteLine("Нет второго аргумента, или введено не число в качестве этого аргумента.\nПринято стандартное число шага: 1");
-                Console.WriteLine("(Второй аргумент записивыется через слэш)\nПример: /2\n");
-            }
-            Console.Write("Введите количество строк: ");        //Опрос о кол-ве строк, если не дан путь к файлу
-            int count = 1;
-            try
-            {
-                count = int.Parse(Console.ReadLine());          //Получение переменной кол-ва строк
-            }
-            catch
-            {
-                Console.WriteLine("Введено не число. Принято стандартное значение строк - 1");
-            }
-            for (int i = 1; i <= count; i++)                    //Цикл опроса построчно
-            {
-                Console.Write($"Введите строчку {i}: ");
-                Read.Append(Console.ReadLine().Trim());
-                Read.Append(' ');
-            }
-            string ReadText = Read.ToString();                  //Упаковка всё в одну строку
-            Console.WriteLine("\n" + ReadText + "\n" + go + "\n");            //Вывод получившейся строки
-            Con(ReadText, go);                                  //Передача строки в метод
-        }
-        
         static void Main(string[] args)
         {
-            StringBuilder MyArgs = new();               //Строитель строк для аргументов
             StringBuilder Read = new();                 //Строитель строк для чтения строк
             string AllFile;                             //Массив для чтения файла
             int go = 1;                                 //Переменная 2 аргумента
-            foreach (string ar in args)                 //Добавление всех аргументов в строителя строк
+            string puthOUT;
+            string puthIN;
+            if (args.Length == 0)                       //Реализация помощи в консоли 
             {
-                MyArgs.Append(ar);
-            }
-            string arg = MyArgs.ToString();
-            if (args.Length == 0)
-            {
-                Console.WriteLine("Помощь в использовании приложением.");
-                Console.WriteLine("Первый аргумент должен быть либо полным путём к .txt файлу, либо '-' вместо пути.");
+                Console.WriteLine("Помощь в использовании приложением.\n\n");
+                Console.WriteLine("-help /help для подсказки.\n");
+                Console.WriteLine("Первый аргумент - входной файл. Он должен быть либо путём к .txt файлу, либо пустым для ввода строк в ручном режиме.");
                 Console.WriteLine(@"Пример пути: C:\input.txt" + "\n");
-                Console.WriteLine("Второй аргумент должен быть числом большим чем 0, записанным через слэш.\nПример второго аргумента: /2");
+                Console.WriteLine("Второй аргумент - выходной файл. Он должен быть либо путём к .txt файлу, либо пустым для ввода строк в ручном режиме.");
+                Console.WriteLine(@"Пример пути: C:\output.txt" + "\n");
+                Console.WriteLine("Третий аргумент должен быть числом большим чем 0, записанным через слэш.\nПример третьего аргумента: /2\n");
                 Console.WriteLine("Нажмите любую кнопку...");
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-            else if (args[0] == "/help" || args[0] == "-help")
+            else if (args[0] == "/help" || args[0] == "-help")      //Помощь если попросят из командной строки
             {
-                Console.WriteLine("Помощь в использовании приложением.");
-                Console.WriteLine("Первый аргумент должен быть либо полным путём к .txt файлу, либо '-' вместо пути.");
+                Console.WriteLine("Помощь в использовании приложением.\n\n");
+                Console.WriteLine("-help /help для подсказки.\n");
+                Console.WriteLine("Первый аргумент - входной файл. Он должен быть либо путём к .txt файлу, либо пустым для ввода строк в ручном режиме.");
                 Console.WriteLine(@"Пример пути: C:\input.txt" + "\n");
-                Console.WriteLine("Второй аргумент должен быть числом большим чем 0, записанным через слэш.\nПример второго аргумента: /2");
+                Console.WriteLine("Второй аргумент - выходной файл. Он должен быть либо путём к .txt файлу, либо пустым для ввода строк в ручном режиме.");
+                Console.WriteLine(@"Пример пути: C:\output.txt" + "\n");
+                Console.WriteLine("Третий аргумент должен быть числом большим чем 0, записанным через слэш.\nПример третьего аргумента: /2");
                 Environment.Exit(0);
             }
             try
             {
-                if (args[0].Contains(":"))
+                puthIN = args[0];
+                puthOUT = args[1];
+                try
                 {
-                    try
-                    {
-                        int j = 0, cout = 0;
-                        foreach (string ar in args)
-                        {
-                            if (ar.Contains("/"))
-                            {
-                                j = cout;
-                                break;
-                            }
-                            cout++;
-                        }
-                        char[] arg2 = args[j].ToCharArray();
-                        go = int.Parse(arg2[j].ToString());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Нет второго аргумента, или введено не число в качестве этого аргумента.\nПринято стандартное число шага: 1");
-                        Console.WriteLine("(Второй аргумент записивыется через слэш)\nПример: /2\n");
-                    }
-                    try
-                    {
-                        //Чтение файла из директории
-                        string File_1 = "";
-                        using (FileStream AllFiles = File.OpenRead(args[0]/*, Encoding.UTF8*/)) //C:\All\C#\Lub3\input.txt
-                        {
-                            byte[] array = new byte[AllFiles.Length];
-                            AllFiles.Read(array, 0, array.Length);                   // считываем данные
-                            File_1 = System.Text.Encoding.Default.GetString(array);  // декодируем байты в строку
-                            char[] ChAll = File_1.ToCharArray();
-                            for (int i = 0; i < ChAll.Length; i++)
-                            {
-                                if (ChAll[i] == '\r')
-                                {
-                                    ChAll[i] = ' ';
-                                    ChAll[i+1] = ' ';
-                                    i++;
-                                }
-                            }
-                            AllFile = String.Concat<char>(ChAll);
-                        }
-                        Console.Write("Прочитаный файл: ");
-                        Console.WriteLine("\n" + File_1 + "\n\nШаг для использования слов: " + go + "\n\n");     //Вывод прочитанного
-                        Fil(AllFile, go);                                         //Передача в метод всех строк
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Ошибка чтения файла!");              //Выдать ошибку, если не получилось прочитать файл
-                        Environment.Exit(0);                                    //Выход из программы
-                    }
+                    char[] arg2 = args[2].ToCharArray();
+                    go = int.Parse(arg2[1].ToString());
                 }
-                else
+                catch
                 {
-                    int j = 0, cout = 0;
+                    Console.WriteLine("Нет третьего аргумента, или введено не число в качестве этого аргумента.\nПринято стандартное число шага: 1");
+                    Console.WriteLine("(Третий аргумент записивыется через слэш)\nПример: /2\n");
+                }
+                try
+                {
+                    //Чтение файла из директории
+                    string File_1 = "";
+                    using (FileStream AllFiles = File.OpenRead(puthIN/*, Encoding.UTF8*/)) //C:\All\C#\Lub3\input.txt
+                    {
+                        byte[] array = new byte[AllFiles.Length];
+                        AllFiles.Read(array, 0, array.Length);                   // считываем данные
+                        File_1 = System.Text.Encoding.Default.GetString(array);  // декодируем байты в строку
+                        char[] ChAll = File_1.ToCharArray();
+                        for (int i = 0; i < ChAll.Length; i++)
+                        {
+                            if (ChAll[i] == '\r')
+                            {
+                                ChAll[i] = ' ';
+                                ChAll[i + 1] = ' ';
+                                i++;
+                            }
+                        }
+                        AllFile = String.Concat<char>(ChAll);
+                    }
+                    Console.Write("Прочитаный файл: ");
+                    Console.WriteLine("\n" + File_1 + "\n\nШаг для использования слов: " + go + "\n\n");     //Вывод прочитанного
+                    Fil(AllFile, go, puthOUT);                                         //Передача в метод всех строк
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка чтения файла!");              //Выдать ошибку, если не получилось прочитать файл
+                    Environment.Exit(0);                                    //Выход из программы
+                }
+            }
+            catch
+            {
+                int j = 0, cout = 0;
+                try
+                {
                     foreach (string ar in args)
                     {
                         if (ar.Contains("/"))
@@ -139,25 +100,37 @@ namespace Lub3
                         }
                         cout++;
                     }
-                    ReadText(args, go, Read, j);
+                    char[] arg2 = args[j].ToCharArray();
+                    go = int.Parse(arg2[j + 1].ToString());
                 }
-            }
-            catch
-            {
-                int j = 0, cout = 0;
-                foreach (string ar in args)
+                catch
                 {
-                    if (ar.Contains("/"))
-                    {
-                        j = cout;
-                        break;
-                    }
-                    cout++;
+                    Console.WriteLine("Нет третьего аргумента, или введено не число в качестве этого аргумента.\nПринято стандартное число шага: 1");
+                    Console.WriteLine("(Третий аргумент записивыется через слэш)\nПример: /2\n");
                 }
-                ReadText(args, go, Read, j);
+                Console.Write("Введите количество строк: ");        //Опрос о кол-ве строк, если не дан путь к файлу
+                int count = 1;
+                try
+                {
+                    count = int.Parse(Console.ReadLine());          //Получение переменной кол-ва строк
+                }
+                catch
+                {
+                    Console.WriteLine("Введено не число. Принято стандартное значение строк - 1");
+                }
+                for (int i = 1; i <= count; i++)                    //Цикл опроса построчно
+                {
+                    Console.Write($"Введите строчку {i}: ");
+                    Read.Append(Console.ReadLine().Trim());
+                    Read.Append(' ');
+                }
+                string ReadText = Read.ToString();                          //Упаковка всё в одну строку
+                Console.WriteLine("\n" + ReadText + "\n" + go + "\n");      //Вывод получившейся строки
+                Con(ReadText, go);
             }
         }
-        static void Fil(string AllFile, int go)
+
+        static void Fil(string AllFile, int go, string puthOUT)
         {
             char lastLatter = ' ';                      //Переменная последнего символа
             string lastStr = "";                        //Переменная последней строки
@@ -170,13 +143,12 @@ namespace Lub3
                 if (!string.IsNullOrEmpty(s))
                     temp.Add(s);
             }
-            subs = temp.ToArray(); 
+            subs = temp.ToArray();
             for (int i = 0; i < subs.Length; i += go)       //Цикл скливания и добовление к результату слов
             {
                 string sub = subs[i];                       //Скопировать из массива в строку
                 string subLow = sub.ToLower();              //Сделать все символы маленькими
-                char[] CharArr = subLow.ToCharArray();      //Сделать массив символов из строки
-                if (lastLatter == CharArr[0])     //Если последняя буква совпадает с первой, то склеить их
+                if (lastLatter == subLow[0])     //Если последняя буква совпадает с первой, то склеить их
                 {
                     OUT.RemoveAt(OUT.Count - 1);               //Вычитаем последнее слово
                     OUT.Add(string.Concat(lastStr, sub));      //Склеиваем последнее и следующее
@@ -187,7 +159,7 @@ namespace Lub3
                     OUT.Add(sub);
                     Cat = sub;                              //Переменная последней фразы
                 }
-                lastLatter = CharArr[^1];                   //Запомнить последнюю букву в слове
+                lastLatter = subLow[^1];                   //Запомнить последнюю букву в слове
                 lastStr = Cat;                              //Запомнить последнее слово
             }
             try
@@ -220,13 +192,12 @@ namespace Lub3
                     temp.Add(s);
             }
             subs = temp.ToArray();
-            for (int i = 0; i < subs.Length; i+=go)       //Цикл скливания и добовление к результату слов
+            for (int i = 0; i < subs.Length; i += go)       //Цикл скливания и добовление к результату слов
             {
                 string sub = subs[i];                   //Скопировать из массива в строку
                 string subLow;
                 subLow = sub.ToLower();                 //Сделать все символы маленькими
-                char[] CharArr = subLow.ToCharArray();  //Сделать массив символов из строки
-                if (lastLatter == CharArr[0])  //Если последняя буква совпадает с первой, то склеить их
+                if (lastLatter == subLow[0])  //Если последняя буква совпадает с первой, то склеить их
                 {
                     OUT.RemoveAt(OUT.Count - 1);                //Вычитаем последнее слово
                     OUT.Add(string.Concat(lastStr, sub));   //Склеиваем последнее и следующее
@@ -237,7 +208,7 @@ namespace Lub3
                     OUT.Add(sub);
                     Cat = sub;
                 }
-                lastLatter = CharArr[^1];                   //Запомнить последнюю букву в слове
+                lastLatter = subLow[^1];                   //Запомнить последнюю букву в слове
                 lastStr = Cat;                              //Запомнить последнее слово
             }
             Console.WriteLine("Вывод получившихся слов:\n");
