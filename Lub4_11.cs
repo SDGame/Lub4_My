@@ -17,7 +17,8 @@ namespace Lub3
             int go = 1;                                 //Переменная 2 аргумента
             string puthOUT;
             string puthIN;
-            if (args.Length == 0)                       //Реализация помощи в консоли 
+
+            if (args.Length == 0)               //Реализация помощи в консоли 
             {
                 Console.WriteLine("Помощь в использовании приложением.\n\n");
                 Console.WriteLine("-help /help для подсказки.\n");
@@ -116,7 +117,7 @@ namespace Lub3
                 }
                 catch
                 {
-                    Console.WriteLine("Введено не число. Принято стандартное значение строк - 1");
+                    Console.WriteLine("Введено не число. Принято стандартное значение строк: 1");
                 }
                 for (int i = 1; i <= count; i++)                    //Цикл опроса построчно
                 {
